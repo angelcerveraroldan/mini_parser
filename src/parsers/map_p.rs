@@ -2,6 +2,8 @@ use std::fmt::Debug;
 
 use crate::{errors::ParsingError, traits::Parser, type_alias::ParserRes};
 
+/// Given a parser with output of type K, and a mapping K -> Z,
+/// make a new parser with output of type Z
 pub struct MapParser<'a, P: Parser, T> {
     pub parser: P,
     pub mapping: &'a dyn Fn(P::Output) -> T,

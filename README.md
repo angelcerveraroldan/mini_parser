@@ -21,6 +21,4 @@ Right now you can create (let a, b be types):
 
 ## Error Handing
 
-At some point it shoudl use this_error, and miette.
-
-# mini_parser
+At some point it should use this_error, and miette.

@@ -2,6 +2,11 @@ use std::fmt::Debug;
 
 use crate::{traits::Parser, type_alias::ParserRes};
 
+/// A parser that consists of first running some parser A, then some parser B.
+///
+/// If either of the parsers give an error, that error will be returned. If they
+/// both suceed, their outputs will be combined using the `AndCombinator`, and
+/// that will be reuturned, with the rest of the unparsed string.
 pub struct AndThenParser<A, B, C>
 where
     A: Parser,
@@ -31,11 +36,13 @@ where
     }
 }
 
+/// This serves as a way to combine two parser outputs
 pub trait AndCombinator<A, B> {
     type Combined;
     fn combine(&self, pair: (A, B)) -> Self::Combined;
 }
 
+/// Combine A and B into a tuple (A, B)
 pub struct IdentityAndCombinator;
 
 impl<A, B> AndCombinator<A, B> for IdentityAndCombinator {
@@ -45,6 +52,8 @@ impl<A, B> AndCombinator<A, B> for IdentityAndCombinator {
     }
 }
 
+/// Keep the output from the first (A) parser, and discard the output
+/// of the second parser (B)
 pub struct KeepFirstOutputOnly;
 
 impl<A, B> AndCombinator<A, B> for KeepFirstOutputOnly {
@@ -54,6 +63,8 @@ impl<A, B> AndCombinator<A, B> for KeepFirstOutputOnly {
     }
 }
 
+/// Keep the output from the second (B) parser, and discard the output
+/// of the first parser (A)
 pub struct KeepSecondOutputOnly;
 
 impl<A, B> AndCombinator<A, B> for KeepSecondOutputOnly {
@@ -63,6 +74,7 @@ impl<A, B> AndCombinator<A, B> for KeepSecondOutputOnly {
     }
 }
 
+/// Discard the output of both parsers, and return the unit type
 pub struct KeepNone;
 
 impl<A, B> AndCombinator<A, B> for KeepNone {

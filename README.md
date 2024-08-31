@@ -2,6 +2,10 @@
 
 A _very_ minimal parser combinator library.
 
+# Example/s
+
+- A [json_parser](https://github.com/angelcerveraroldan/json_parser) made with this library.
+
 # Features 
 
 Supports parsing of UTF-8 characters, not just ASCII.

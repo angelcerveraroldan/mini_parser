@@ -1,6 +1,7 @@
 pub mod and_p;
 pub mod map_p;
 pub mod or_p;
+pub mod string_p;
 
 use crate::{errors::ParsingError, traits::Parser, type_alias::ParserRes};
 

@@ -2,6 +2,12 @@ use crate::{errors::ParsingError, traits::Parser};
 
 pub struct RepeatParser<P>(P);
 
+impl<P> RepeatParser<P> {
+    pub fn new(p: P) -> Self {
+        Self(p)
+    }
+}
+
 impl<P> Parser for RepeatParser<P>
 where
     P: Parser,

@@ -4,7 +4,11 @@ A _very_ minimal parser combinator library.
 
 # Example/s
 
-- A [json_parser](https://github.com/angelcerveraroldan/json_parser) made with this library. This took about 130 lines (excluding testing)
+These can be seen inside the `examples` directory.
+
+- A `json` parser made with this library. This took about 130 lines (excluding testing)
+
+To run any of them, siply run `cargo run --example <name>`.
 
 # Features 
 

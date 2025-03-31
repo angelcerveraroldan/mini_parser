@@ -9,6 +9,7 @@ pub mod parsers;
 pub mod traits;
 pub mod type_alias;
 
+/// Main parser will hold the source code
 pub struct MainParser<P>
 where
     P: Parser,

@@ -33,7 +33,7 @@ impl Parser for StringParser {
                     let kind = ParsingErrorKind::PatternNotFound(
                         "Did not find closing quote \"".to_string(),
                     );
-                    return Err(ParsingError::new(kind, rest.line, rest.col));
+                    return Err(ParsingError::new(kind, rest.offset));
                 }
             };
         }
@@ -63,6 +63,6 @@ mod string_parser_test {
             .unwrap();
         assert_eq!(p, "This is some string".to_string());
         assert_eq!(inp.source, " and this is the rest".to_string());
-        assert_eq!(inp.col, 21);
+        assert_eq!(inp.offset, 21);
     }
 }

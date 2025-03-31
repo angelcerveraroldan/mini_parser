@@ -11,6 +11,7 @@ use parlib::{
         ParseMatch, ParseWhile, ParseWhileOrNothing,
     },
     traits::Parser,
+    MainParser,
 };
 
 #[derive(Debug, PartialEq)]
@@ -109,7 +110,10 @@ impl Parser for CompoundParser {
             }
         }
         // find the closing bracket
-        let (_, f_rest) = ws.and_then(cb).parse(&rest)?;
+        let (_, f_rest) = ws
+            .and_then(cb)
+            .with_error("Expected closing bracket or expression")
+            .parse(&rest)?;
         Ok((
             Expression::Compound {
                 ident: i,
@@ -120,7 +124,7 @@ impl Parser for CompoundParser {
     }
 }
 
-fn main() {
+fn main() -> miette::Result<()> {
     loop {
         println!("Please enter a single lisp line to parse it:");
         let _ = stdout().flush();
@@ -128,12 +132,13 @@ fn main() {
         stdin()
             .read_line(&mut buffer)
             .expect("Error reading user input");
-        let par = expression_parse();
-
+        let par = MainParser {
+            src: buffer.clone(),
+            parser: expression_parse(),
+        };
         if buffer == String::from("exit\n") {
-            break;
+            return Ok(());
         }
-
-        println!("{:?}", par.parse(&buffer.into()));
+        println!("{:?}", par.parse(&buffer.into())?);
     }
 }

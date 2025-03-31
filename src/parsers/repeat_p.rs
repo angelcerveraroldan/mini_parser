@@ -68,7 +68,7 @@ where
             let err_kind = ParsingErrorKind::PatternNotFound(
                 "Parser did not run the minum number of times".to_string(),
             );
-            return Err(ParsingError::new(err_kind, rest.line, rest.col));
+            return Err(ParsingError::new(err_kind, rest.offset));
         }
 
         Ok((acc, rest))

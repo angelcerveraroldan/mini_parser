@@ -11,19 +11,28 @@ use super::simple_error::ParsingError;
 /// nice error message, so it should only be used at the 'root parser'
 #[derive(Debug, Error, Diagnostic)]
 #[error("Error during parsing")]
-#[diagnostic(help("try doing it better next time?"))]
 pub struct PrettyError {
     #[source_code]
     src: String,
-    #[label("Parsing Error Here")]
+    #[label("{}", self.label_message)]
     position: SourceSpan,
+    label_message: String,
 }
 
 impl<P: Parser> From<(ParsingError, &MainParser<P>)> for PrettyError {
     fn from((perror, pmain): (ParsingError, &MainParser<P>)) -> Self {
+        let label_message = match perror.kind {
+            super::ParsingErrorKind::MappingError(_)
+            | super::ParsingErrorKind::CannotParseAnEmptyString => None,
+            super::ParsingErrorKind::PatternNotFound(err) => Some(err),
+            super::ParsingErrorKind::CustomError(err) => Some(err),
+        }
+        .unwrap_or(String::from("Error Here"));
         Self {
             src: pmain.src.clone(),
-            position: (perror.line, perror.col).into(),
+            // TODO: The length of the error is 0 as of right now
+            position: (perror.offset, 0).into(),
+            label_message,
         }
     }
 }

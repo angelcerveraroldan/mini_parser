@@ -10,6 +10,7 @@ use parlib::{
         ParseWhileOrNothing,
     },
     traits::Parser,
+    MainParser,
 };
 
 fn parse_integer() -> impl Parser<Output = String> {
@@ -124,13 +125,18 @@ impl Parser for ObjectParser {
     }
 }
 
-fn main() {
-    println!("Please enter a single json line to parse it:");
-    let _ = stdout().flush();
-    let mut buffer: String = String::new();
-    stdin()
-        .read_line(&mut buffer)
-        .expect("Error reading user input");
-    let par = primitive_parser();
-    println!("{:?}", par.parse(&buffer.into()));
+fn main() -> miette::Result<()> {
+    loop {
+        println!("Please enter a single json line to parse it:");
+        let _ = stdout().flush();
+        let mut buffer: String = String::new();
+        stdin()
+            .read_line(&mut buffer)
+            .expect("Error reading user input");
+        let par = MainParser {
+            src: buffer.clone(),
+            parser: primitive_parser(),
+        };
+        println!("{:?}", par.parse(&buffer.into())?);
+    }
 }

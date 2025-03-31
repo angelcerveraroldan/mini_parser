@@ -43,7 +43,7 @@ where
                 let kind = ParsingErrorKind::MappingError(
                     "Parsing worked, but mapping failed".to_string(),
                 );
-                Err(ParsingError::new(kind, rest.line, rest.col))
+                Err(ParsingError::new(kind, rest.offset))
             }
             Some(mapped_val) => Ok((mapped_val, rest)),
         }

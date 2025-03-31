@@ -40,7 +40,7 @@ where
                 "{} did not match pattern: {}",
                 input.source, match_str
             ));
-            return Err(ParsingError::new(kind, input.line, input.col));
+            return Err(ParsingError::new(kind, input.offset));
         }
 
         let rest = input.clone().char_offset(match_str.len());
@@ -72,7 +72,7 @@ impl Parser for ParseIf {
             return Ok((maybe_first_char.unwrap(), input.clone().char_offset(1)));
         }
         let kind = ParsingErrorKind::PatternNotFound("if predicate not met".to_string());
-        Err(ParsingError::new(kind, input.line, input.col))
+        Err(ParsingError::new(kind, input.offset))
     }
 }
 
@@ -168,7 +168,7 @@ where
         if taken.is_empty() {
             let kind =
                 ParsingErrorKind::PatternNotFound("no characters matched predicate".to_string());
-            return Err(ParsingError::new(kind, input.line, input.col));
+            return Err(ParsingError::new(kind, input.offset));
         }
         let len = taken.len();
         Ok((taken, input.clone().char_offset(len)))
